@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bersihku — SMK Hang Tuah 1</title>
+
+  <!-- ══ PWA META TAGS ══ -->
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#16A34A"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="Bersihku"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="application-name" content="Bersihku"/>
+  <meta name="description" content="Sistem Manajemen Kebersihan SMK Hang Tuah 1"/>
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Bersihku"/>
+  <meta property="og:description" content="Sistem Manajemen Kebersihan SMK Hang Tuah 1"/>
+
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ══════════════════════ LOGIN SCREEN ══════════════════════ -->
+<div id="loginScreen" class="login-screen">
+
+  <!-- Panel Kiri: Foto + Branding -->
+  <div class="login-photo-panel">
+    <div class="login-photo-overlay"></div>
+    <div class="login-photo-content">
+      <div class="login-brand">
+        <div class="login-brand-icon">🧹</div>
+        <h1 class="login-brand-name">Bersihku</h1>
+        <p class="login-brand-sub">Sistem Manajemen Kebersihan<br/>SMK Hang Tuah 1</p>
+      </div>
+      <div class="login-features">
+        <div class="login-feat"><span class="login-feat-dot"></span>Jadwal piket terorganisir</div>
+        <div class="login-feat"><span class="login-feat-dot"></span>Laporan kebersihan real-time</div>
+        <div class="login-feat"><span class="login-feat-dot"></span>Dokumentasi foto kegiatan</div>
+        <div class="login-feat"><span class="login-feat-dot"></span>Backup &amp; pemulihan data</div>
+      </div>
+      <a href="https://www.instagram.com/smkht1_official/" target="_blank" rel="noopener" class="ig-link">
+        <svg class="ig-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/>
+        </svg>
+        <span>@smkht1_official</span>
+        <svg class="ig-arrow" viewBox="0 0 16 16" fill="currentColor" width="12"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" clip-rule="evenodd"/></svg>
+      </a>
+    </div>
+    <div class="login-circles">
+      <div class="lc lc1"></div>
+      <div class="lc lc2"></div>
+      <div class="lc lc3"></div>
+    </div>
+  </div>
+
+  <!-- Panel Kanan: Form Login -->
+  <div class="login-form-panel">
+    <div class="login-form-inner">
+      <div class="login-mobile-logo">
+        <span>🧹</span>
+        <strong>Bersihku</strong>
+      </div>
+      <div class="login-welcome">
+        <h2>Selamat Datang! 👋</h2>
+        <p>Masuk untuk mengelola kebersihan sekolah</p>
+      </div>
+      <div class="role-tabs">
+        <button class="role-tab active" data-role="guru"  onclick="selectRole('guru', this)">👩‍🏫 Guru</button>
+        <button class="role-tab"        data-role="siswa" onclick="selectRole('siswa', this)">🧑‍🎓 Siswa</button>
+      </div>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="loginUser" placeholder="Masukkan username" autocomplete="username"/>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pass-wrap">
+          <input type="password" id="loginPass" placeholder="Masukkan password"
+                 onkeydown="if(event.key==='Enter') doLogin()"/>
+          <button class="pass-toggle" onclick="togglePassView()" type="button">👁</button>
+        </div>
+      </div>
+      <div id="loginError" class="login-error hidden">⚠️ Username atau password salah!</div>
+      <button class="btn-login" onclick="doLogin()">Masuk →</button>
+      <div class="login-hint">Demo: guru/guru123 · siswa/siswa123</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ MAIN APP ══════════════════════ -->
+<div id="app" class="hidden">
+
+  <nav class="navbar">
+    <div class="nav-logo">
+      <div class="nav-logo-icon">🧹</div>
+      <span class="nav-logo-text">Bersihku</span>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a class="nav-link active" onclick="showSection('beranda',this)">🏠 Beranda</a>
+      <a class="nav-link" onclick="showSection('jadwal',this)">📋 Jadwal</a>
+      <a class="nav-link" onclick="showSection('laporan',this)">📊 Laporan</a>
+      <a class="nav-link" onclick="showSection('galeri',this)">🖼️ Galeri</a>
+      <a class="nav-link" onclick="showSection('profil',this)">🏫 Profil</a>
+      <a class="nav-link" onclick="showSection('pengaturan',this)">⚙️ Pengaturan</a>
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn" onclick="toggleDark()" id="darkBtn" title="Ganti tema">🌙</button>
+      <span class="user-badge" id="userBadge"></span>
+      <button class="btn-logout" onclick="doLogout()">Keluar</button>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg-circles">
+      <div class="hbc hbc1"></div>
+      <div class="hbc hbc2"></div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-text">
+        <span class="badge">🌿 Sekolah bersih, belajar nyaman</span>
+        <h1>Halo, <span class="hero-name" id="heroName">—</span>! 👋</h1>
+        <p id="heroSekolah">Platform manajemen kebersihan sekolah</p>
+      </div>
+      <div class="hero-card">
+        <div class="hero-card-icon">✨</div>
+        <p>Mari jaga kebersihan<br/>lingkungan sekolah kita!</p>
+      </div>
+    </div>
+    <div class="hero-wave">
+      <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,28 C240,56 480,0 720,28 C960,56 1200,0 1440,28 L1440,56 L0,56 Z" fill="var(--bg)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- BERANDA -->
+  <section id="beranda" class="section active">
+    <div class="stats-grid">
+      <div class="stat-card sc-green">
+        <div class="stat-emoji">🏷️</div>
+        <div class="stat-body">
+          <div class="stat-label">Kelas Terdaftar</div>
+          <div class="stat-value" id="statKelas">0</div>
+        </div>
+      </div>
+      <div class="stat-card sc-blue">
+        <div class="stat-emoji">📝</div>
+        <div class="stat-body">
+          <div class="stat-label">Laporan Bulan Ini</div>
+          <div class="stat-value" id="statLaporan">0</div>
+        </div>
+      </div>
+      <div class="stat-card sc-amber">
+        <div class="stat-emoji">📸</div>
+        <div class="stat-body">
+          <div class="stat-label">Foto Galeri</div>
+          <div class="stat-value" id="statFoto">0</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" id="piketHariTitle">📋 Piket Hari Ini</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kelas</th><th>Petugas</th><th>Tugas</th></tr></thead>
+          <tbody id="piketHariBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📝 Laporan Terbaru</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kelas</th><th>Kondisi</th><th>Tanggal</th><th>Oleh</th></tr></thead>
+          <tbody id="laporanTerbaruBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- JADWAL -->
+  <section id="jadwal" class="section">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📋 Jadwal Piket</div>
+        <div class="card-actions">
+          <select id="filterKelasJadwal" onchange="renderJadwal()"><option value="">— Pilih Kelas —</option></select>
+          <button class="btn-ghost" onclick="printJadwal()">🖨️ Cetak</button>
+          <button class="btn-primary guru-only" onclick="openModalTambahJadwal()">+ Tambah</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Hari</th><th>Petugas</th><th>Tugas</th><th class="guru-only">Aksi</th></tr></thead>
+          <tbody id="jadwalBody"><tr><td colspan="4" class="empty-state">Pilih kelas untuk melihat jadwal.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">🕐 Riwayat Perubahan Jadwal</div>
+        <button class="btn-ghost guru-only" onclick="clearJadwalHistory()">Hapus Semua</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Aksi</th><th>Kelas</th><th>Detail</th><th>Oleh</th><th>Waktu</th></tr></thead>
+          <tbody id="jadwalHistoryBody"><tr><td colspan="5" class="empty-state">Belum ada riwayat.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAPORAN -->
+  <section id="laporan" class="section">
+    <div class="card">
+      <div class="card-title">✏️ Buat Laporan Kebersihan</div>
+      <div class="laporan-form">
+        <div class="form-row">
+          <div class="form-group"><label>Kelas</label><select id="lapKelas"></select></div>
+          <div class="form-group">
+            <label>Kondisi Kebersihan</label>
+            <select id="lapKondisi">
+              <option>Sangat Bersih</option><option>Bersih</option>
+              <option>Cukup Bersih</option><option>Perlu Perhatian</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group"><label>Dilaporkan Oleh</label><input type="text" id="lapPelapor" placeholder="Nama guru / petugas..."/></div>
+        <div class="form-group"><label>Keterangan</label><textarea id="lapKeterangan" placeholder="Tuliskan kondisi kelas hari ini..."></textarea></div>
+        <div class="form-actions"><button class="btn-primary" onclick="submitLaporan()">Kirim Laporan</button></div>
+        <div id="lapSuccessMsg" class="success-msg hidden">✅ Laporan berhasil dikirim!</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📊 Riwayat Laporan</div>
+        <div class="card-actions">
+          <select id="filterBulanLaporan" onchange="renderLaporan()"><option value="">Semua Bulan</option></select>
+          <select id="filterKelasLaporan" onchange="renderLaporan()"><option value="">Semua Kelas</option></select>
+          <button class="btn-ghost" onclick="exportLaporanPDF()">⬇️ Export PDF</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kelas</th><th>Kondisi</th><th>Keterangan</th><th>Tanggal</th><th>Oleh</th><th class="guru-only">Aksi</th></tr></thead>
+          <tbody id="laporanBody"><tr><td colspan="6" class="empty-state">Belum ada laporan.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERI -->
+  <section id="galeri" class="section">
+    <div class="card">
+      <div class="card-title">📷 Unggah Foto Kebersihan</div>
+      <label class="upload-area" for="fotoInput">
+        <div class="upload-icon">📸</div>
+        <p>Klik atau seret foto ke sini</p>
+        <p class="upload-sub">JPG, PNG — foto otomatis tersimpan di browser</p>
+        <input type="file" id="fotoInput" accept="image/*" multiple onchange="handleFotoSelect(event)"/>
+      </label>
+      <div id="uploadForm" class="upload-form hidden">
+        <div class="form-row">
+          <div class="form-group"><label>Kelas</label><select id="uploadKelas"></select></div>
+          <div class="form-group" style="flex:2"><label>Deskripsi (opsional)</label><input type="text" id="uploadDeskripsi" placeholder="Kegiatan bersih-bersih pagi..."/></div>
+        </div>
+        <div id="previewFotoArea" class="preview-area"></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-primary" onclick="simpanFoto()">💾 Simpan Foto</button>
+          <button class="btn-ghost" onclick="batalUpload()">Batal</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">🖼️ Foto Tersimpan</div>
+        <select id="filterKelasGaleri" onchange="renderGaleri()"><option value="">Semua Kelas</option></select>
+      </div>
+      <div class="foto-grid" id="fotoGrid">
+        <div class="galeri-empty" style="grid-column:1/-1">
+          <div class="galeri-empty-icon">📷</div>
+          <p>Belum ada foto tersimpan</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFIL -->
+  <section id="profil" class="section">
+    <div class="card">
+      <div class="card-title">🏫 Informasi Sekolah</div>
+      <div class="laporan-form">
+        <div class="form-row">
+          <div class="form-group"><label>Nama Sekolah</label><input type="text" id="profilNama" placeholder="SMA Negeri 1"/></div>
+          <div class="form-group"><label>Kepala Sekolah</label><input type="text" id="profilKepala" placeholder="Nama kepala sekolah"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group" style="flex:2"><label>Alamat Sekolah</label><input type="text" id="profilAlamat" placeholder="Jl. Pendidikan No. 1"/></div>
+          <div class="form-group"><label>Tahun Ajaran</label><input type="text" id="profilTahun" placeholder="2025/2026"/></div>
+        </div>
+        <div class="form-actions"><button class="btn-primary" onclick="simpanProfil()">Simpan Perubahan</button></div>
+        <div id="profilSuccessMsg" class="success-msg hidden">✅ Profil berhasil disimpan!</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">🏷️ Daftar Kelas</div>
+        <button class="btn-primary guru-only" onclick="openModalTambahKelas()">+ Tambah Kelas</button>
+      </div>
+      <div class="kelas-grid" id="kelasGrid"></div>
+    </div>
+  </section>
+
+  <!-- PENGATURAN -->
+  <section id="pengaturan" class="section">
+    <div class="card">
+      <div class="card-title">🎨 Tampilan</div>
+      <div class="setting-row">
+        <div><strong>Dark Mode</strong><p>Ganti tampilan ke mode gelap</p></div>
+        <label class="toggle"><input type="checkbox" id="darkToggle" onchange="toggleDarkFromCheckbox(this)"/><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔔 Notifikasi Pengingat Piket</div>
+      <div class="setting-row">
+        <div><strong>Aktifkan Notifikasi Harian</strong><p>Pengingat jadwal piket setiap hari saat browser dibuka</p></div>
+        <label class="toggle"><input type="checkbox" id="notifToggle" onchange="toggleNotif(this)"/><span class="toggle-slider"></span></label>
+      </div>
+      <div id="notifTimeRow" class="form-group" style="margin-top:14px;display:none;flex-direction:column;gap:5px;">
+        <label>Jam Pengingat</label>
+        <input type="time" id="notifJam" value="06:00" onchange="simpanNotif()" style="max-width:150px;"/>
+        <p style="font-size:12px;color:var(--text-muted);">Notifikasi muncul saat browser dibuka setelah jam ini.</p>
+      </div>
+      <div id="notifStatusMsg" class="success-msg hidden" style="margin-top:12px;"></div>
+    </div>
+    <div class="card guru-only">
+      <div class="card-title">👤 Kelola Akun Pengguna</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aksi</th></tr></thead>
+          <tbody id="userTable"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;"><button class="btn-primary" onclick="openModalTambahUser()">+ Tambah Akun</button></div>
+    </div>
+    <div class="card">
+      <div class="card-title">💾 Backup &amp; Pemulihan Data</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Ekspor semua data ke file <strong>.json</strong>. Gunakan Impor untuk memulihkan setelah reset atau pindah perangkat.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="exportData()">⬇️ Ekspor Backup</button>
+        <button class="btn-ghost"   onclick="importData()">⬆️ Impor Backup</button>
+      </div>
+      <div style="margin-top:14px;padding:10px 14px;background:var(--primary-lt);border-radius:8px;font-size:12px;color:var(--primary-tx);">💡 <strong>Tips:</strong> Selalu ekspor backup sebelum klik Reset!</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🗑️ Reset Data</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:14px;">Hapus semua data dan kembali ke pengaturan awal. Tidak bisa dibatalkan.</p>
+      <button class="btn-danger" onclick="resetData()">Reset Semua Data</button>
+    </div>
+  </section>
+
+</div><!-- /app -->
+
+<!-- MODAL -->
+<div id="modalOverlay" class="modal-overlay hidden" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <span id="modalTitle" class="modal-title"></span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalBody" class="modal-body"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox hidden" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightboxImg" src="" alt=""/>
+    <div class="lightbox-info" id="lightboxInfo"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+
+<!-- ══ PWA SERVICE WORKER REGISTRATION ══ -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW registered:', reg.scope))
+        .catch(err => console.warn('SW registration failed:', err));
+    });
+  }
+</script>
+</body>
+</html>

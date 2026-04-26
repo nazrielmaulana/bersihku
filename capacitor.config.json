@@ -1,0 +1,26 @@
+{
+  "appId": "id.smkhangtah1.bersihku",
+  "appName": "Bersihku",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true,
+    "backgroundColor": "#16A34A",
+    "minWebViewVersion": 60
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#16A34A",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_icon_config_sample",
+      "iconColor": "#16A34A"
+    }
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
